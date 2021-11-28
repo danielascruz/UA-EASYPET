@@ -37,4 +37,4 @@ print('The computed optimal threshold is:', filters.threshold_li(camera))
 
 plt.show()
 
-# Ver continuacao no site
+

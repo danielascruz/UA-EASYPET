@@ -20,7 +20,7 @@ camera[outer_disk_mask] = 0
 
 plt.figure(figsize=(4, 4))
 
-plt.imshow(data.camera())
+plt.imshow(data.camera(), cmap='gray')
 plt.axis('off')
 plt.show()
 
