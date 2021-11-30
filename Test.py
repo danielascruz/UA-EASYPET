@@ -5,6 +5,7 @@ from skimage.transform import rescale, resize, downscale_local_mean
 from skimage.filters import threshold_otsu, try_all_threshold, threshold_multiotsu
 import numpy as np
 from skimage.filters.thresholding import _cross_entropy
+import os
 
 # --- EDGES ---
 image = data.cat()
@@ -148,7 +149,7 @@ regions = np.digitize(cat, bins=thresh_multi)
 
 fig_multi, ax_multi = plt.subplots(1, 3, figsize=(10, 3.5))
 
-ax_multi[0].imshow(cat, cmap='gray')
+ax_multi[0].imshow(cat, cmap='jet')
 ax_multi[0].set_title('Original')
 ax_multi[0].axis('off')
 
@@ -161,3 +162,14 @@ ax_multi[2].axis('off')
 
 plt.subplots_adjust()
 plt.show()
+
+
+# Covariancia
+# std
+# SNR
+# Normalized mean squared error ou mean squared error
+# Normalized standard deviation
+
+# PET: Recovery Coefficient (CRC ou RC)
+diretorio = os.path.dirname(os.path.abspath(__file__))
+image = plt.imread(os.path.join(diretorio, image, "fruta-1024x676.jpg"))
