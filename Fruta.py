@@ -13,7 +13,7 @@ image = plt.imread(os.path.join(directory, "image", "fruta-1024x676.jpg"))
 
 grayscale = rgb2gray(image)
 edges1 = feature.canny(grayscale)
-edges2 = feature.canny(grayscale, 2)
+edges2 = feature.canny(grayscale, 2)  # Standard Deviation of the Gaussian filter
 
 fig, axes = plt.subplots(1, 3, figsize=(8, 3))
 
