@@ -70,15 +70,25 @@ green = image[:, :, 1] * mask
 blue = image[:, :, 2] * mask
 image_masked = np.dstack((red, green, blue))
 plt.imshow(image_masked)
+plt.title('Color Segmentation with HSV')
 plt.show()
-
-# --- TODO COLOR IMAGE SEGMENTATION WITH CV ---
 
 # --- THRESHOLDING METHODS ---
 # Otsu's
 otsu = threshold_otsu(grayscale)
 binary_otsu = grayscale > otsu
-# TODO Represent the original image and the result of Otsu's Method
+
+plt.figure()
+plt.subplot(1, 2, 1)
+plt.imshow(image)
+plt.title('Original')
+plt.axis('off')
+plt.subplot(1, 2, 2)
+plt.imshow(binary_otsu, cmap=plt.cm.gray)
+plt.title("Thresholded with Otsu's Method")
+plt.axis('off')
+plt.show()
+
 # --- Metrics ---
 # Covariance; Signal Noise Ratio; Normalized Mean Squared Error or Mean Squared Error; Normalized Standard Deviation
 # or Standard Deviation;
