@@ -28,9 +28,6 @@ cv2.circle(mask, (206, 197), 74, 255, -1)
 cv2.circle(mask, (352, 206), 76, 255, -1)
 result = cv2.bitwise_and(fruit_RGB, fruit_RGB, mask=mask)
 
-SNR = skimage.metrics.peak_signal_noise_ratio(ground_truth_RGB, result)
-print("The peak signal to noise ratio is: ", SNR)
-
 plt.figure()
 plt.subplot(2, 1, 1)
 plt.imshow(ground_truth_RGB)
@@ -47,3 +44,14 @@ plt.imshow(mask, cmap='gray')
 plt.title('Mask used')
 plt.axis('off')
 plt.show()
+
+# Metrics
+# SNR -> between 20 and 30 dB
+SNR = skimage.metrics.peak_signal_noise_ratio(ground_truth_RGB, result)
+print("The peak signal to noise ratio is: ", SNR)
+
+# Intersection over union -> quantify the percent overlap between the ground truth and the segmented image (1 is 100%).
+intersection = np.logical_and(ground_truth_RGB, result)
+union = np.logical_or(ground_truth_RGB, result)
+iou_score = (np.sum(intersection) / np.sum(union)) * 100
+print("Intersection over union (percent):", iou_score)

@@ -42,9 +42,6 @@ cv2.circle(mask, (210, 196), 73, 255, -1)
 cv2.circle(mask, (350, 205), 75, 255, -1)
 result = cv2.bitwise_and(result_K, result_K, mask=mask)
 
-SNR = skimage.metrics.peak_signal_noise_ratio(ground_truth_RGB, result)
-print("The peak signal to noise ratio is: ", SNR)
-
 plt.figure()
 plt.imshow(result_K)
 plt.axis('off')
@@ -62,3 +59,21 @@ plt.imshow(result)
 plt.axis('off')
 plt.title('Segmented Image with K-Means and then applied a mask')
 plt.show()
+
+# Metrics
+SNR_K = skimage.metrics.peak_signal_noise_ratio(ground_truth_RGB, result_K)
+print("SNR for segmented image without a mask ", SNR_K)
+
+SNR = skimage.metrics.peak_signal_noise_ratio(ground_truth_RGB, result)
+print("SNR for segmented image with a mask ", SNR)
+
+# Intersection over union -> quantify the percent overlap between the ground truth and the segmented image (1 is 100%).
+intersection_K = np.logical_and(ground_truth_RGB, result_K)
+union_K = np.logical_or(ground_truth_RGB, result_K)
+iou_score_K = (np.sum(intersection_K) / np.sum(union_K)) * 100
+print("Intersection over union (percent) for segmented image without a mask:", iou_score_K)
+
+intersection = np.logical_and(ground_truth_RGB, result)
+union = np.logical_or(ground_truth_RGB, result)
+iou_score = (np.sum(intersection) / np.sum(union)) * 100
+print("Intersection over union (percent) for segmented image with a mask:", iou_score)

@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import cv2
+import numpy as np
 import skimage
 from skimage.metrics import peak_signal_noise_ratio
 
@@ -70,9 +71,6 @@ mask3 = cv2.inRange(fruit_HSV, light, dark)
 mask = mask1 + mask2 + mask3
 result = cv2.bitwise_and(fruit_RGB, fruit_RGB, mask=mask)
 
-SNR = skimage.metrics.peak_signal_noise_ratio(ground_truth_RGB, result)
-print("In the second case, the peak signal to noise ratio, for H is: ", SNR)
-
 plt.figure()
 plt.subplot(2, 1, 1)
 plt.imshow(ground_truth_RGB)
@@ -84,3 +82,13 @@ plt.imshow(result)
 plt.title('Segmentation using color masking, but manually')
 plt.axis('off')
 plt.show()
+
+# Metrics
+SNR = skimage.metrics.peak_signal_noise_ratio(ground_truth_RGB, result)
+print("In the second case, the peak signal to noise ratio is:", SNR)
+
+# Intersection over union -> quantify the percent overlap between the ground truth and the segmented image (1 is 100%).
+intersection = np.logical_and(ground_truth_RGB, result)
+union = np.logical_or(ground_truth_RGB, result)
+iou_score = (np.sum(intersection) / np.sum(union)) * 100
+print("In the second case, intersection over union (percent):", iou_score)

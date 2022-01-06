@@ -49,4 +49,18 @@ plt.show()
 
 # Metric
 SNR_otsu = skimage.metrics.peak_signal_noise_ratio(ground_truth_RGB, result_otsu_RGB)
-print("The peak signal to noise ratio, for Otsu's method, is:", SNR_otsu)
+print("The peak signal to noise ratio, for Otsu's method without a mask, is:", SNR_otsu)
+
+SNR = skimage.metrics.peak_signal_noise_ratio(ground_truth_RGB, result)
+print("The peak signal to noise ratio, for Otsu's method with a mask, is:", SNR)
+
+# Intersection over union -> quantify the percent overlap between the ground truth and the segmented image (1 is 100%).
+intersection_otsu = np.logical_and(ground_truth_RGB, result_otsu_RGB)
+union_otsu = np.logical_or(ground_truth_RGB, result_otsu_RGB)
+iou_score_otsu = (np.sum(intersection_otsu) / np.sum(union_otsu)) * 100
+print("Intersection over union (percent) for segmented image without a mask:", iou_score_otsu)
+
+intersection = np.logical_and(ground_truth_RGB, result)
+union = np.logical_or(ground_truth_RGB, result)
+iou_score = (np.sum(intersection) / np.sum(union)) * 100
+print("Intersection over union (percent) for segmented image with a mask:", iou_score)
