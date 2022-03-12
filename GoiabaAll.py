@@ -90,7 +90,7 @@ plt.figure()
 plt.imshow(result)
 
 mask = []
-for i in result:cd
+for i in result:
     line = []
     for j in i:
         if j[0] != 0 or j[1] != 0 or j[2] != 0:
