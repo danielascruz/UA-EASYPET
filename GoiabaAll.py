@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
+import skimage.metrics
 
 
 fruit_BGR = cv2.imread('./image/goiaba-43.jpg')
@@ -22,7 +23,7 @@ plt.title('Original Image')
 plt.subplot(2, 1, 2)
 plt.imshow(ground_truth)
 plt.axis('off')
-plt.title('Ground Truth')
+plt.title('Ground Truth created with circles')
 
 
 # K-Means
@@ -88,17 +89,36 @@ for x in range(0, Kmeans_result_HSV.shape[0]):
 result = cv2.cvtColor(Kmeans_result_HSV, cv2.COLOR_HSV2RGB)
 plt.figure()
 plt.imshow(result)
+plt.title('Result of color segmentation')
+plt.axis('off')
 
-mask = []
+
+bitmask = []
 for i in result:
     line = []
     for j in i:
         if j[0] != 0 or j[1] != 0 or j[2] != 0:
-            line.append([255, 255, 255])
+            line.append([1, 1, 1])
         else:
             line.append([0, 0, 0])
-    mask.append(line)
+    bitmask.append(line)
 
 plt.figure()
-plt.imshow(mask)
+final_result = fruit_RGB*bitmask
+plt.imshow(final_result)
+plt.axis('off')
+plt.title('Original Image with a mask applied')
 plt.show()
+
+
+# Metrics
+SNR = skimage.metrics.peak_signal_noise_ratio(ground_truth, final_result)
+MSE = skimage.metrics.mean_squared_error(ground_truth, final_result)
+NRMSE = skimage.metrics.normalized_root_mse(ground_truth, final_result)
+STD_original = np.std(ground_truth)
+STD = np.std(final_result)
+
+print("The peak signal to noise ratio is:", SNR)
+print("The mean-squared error between the images is:", MSE)
+print("The normalized root mean-squared error between the images is:", NRMSE)
+print("The standard deviation for the original image is:", STD_original, "and for the thresholded image is:", STD)
