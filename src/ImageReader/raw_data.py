@@ -11,7 +11,7 @@ class RawDataSetter:
         self.size_file_m = size_file_m
         self.pixel_size = pixel_size
         self.pixel_size_axial = pixel_size_axial
-        self.size_file = self.size_file_m[0]*self.size_file_m[1]*self.size_file_m[2]
+        self.size_file = self.size_file_m[0] * self.size_file_m[1] * self.size_file_m[2]
         self.offset = offset
         self.volume = None
 
