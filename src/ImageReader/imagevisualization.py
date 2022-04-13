@@ -17,5 +17,5 @@ class ImageVisualizer:
     def organ(self, i=0, ax=0):
         volume = np.copy(self.data.volume[:, :, :])
         volume[volume != i] = 0
-        plt.imshow(np.max(volume, axis=ax))
+        plt.imshow(np.sum(volume, axis=ax))
         plt.show()
