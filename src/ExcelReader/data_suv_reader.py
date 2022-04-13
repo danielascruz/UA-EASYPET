@@ -23,3 +23,10 @@ class SuvReader:
         self.df_study2_M = self.df_study2_M.set_index('organs').to_dict(orient="index")
         self.df_study2_F = self.df_study2_F.set_index('organs').to_dict(orient="index")
         self.df_study3 = self.df_study3.set_index('organs').to_dict(orient="index")
+
+        for j in [self.df_study1_M, self.df_study1_F, self.df_study2_M, self.df_study2_F, self.df_study3]:
+            for i in j.keys():
+                if j[i]["SUV_mean"] == "None":
+                    j[i]["SUV_mean"] = 0
+                    j[i]["SUV_min"] = 0
+                    j[i]["SUV_max"] = 0
