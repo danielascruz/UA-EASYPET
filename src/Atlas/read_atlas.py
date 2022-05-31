@@ -1,5 +1,4 @@
 import os
-import re
 
 
 class Atlas:
@@ -8,7 +7,7 @@ class Atlas:
         self.file_name = file_name
         self.atlas_data = {}
 
-    def load_file(self):
+    def load_file_txt(self):
         with open(os.path.join(self.directory, self.file_name), "r") as atlas:
             for line in atlas:
                 par = line.split("\t")[0]
