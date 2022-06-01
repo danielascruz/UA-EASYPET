@@ -3,7 +3,7 @@ import tkinter as tk
 import matplotlib.pyplot as plt
 from src.ImageReader import RawDataSetter, ImageVisualizer
 from src.ExcelReader import SuvReader, SuvDisplayer
-from src.Segmentation import GroundTruth, Segmentation, RegionInterest
+from src.Segmentation import GroundTruth, Segmentation, RegionInterest, MiceData
 from src.Metrics import Metrics
 
 if __name__ == "__main__":
@@ -48,15 +48,19 @@ if __name__ == "__main__":
     # --- Data of Activity ---
     voxel_volume = (0.145 * 0.145 * 0.145) * 0.001  # cm^3 -> mL
     activity_injected = 18500000
+    temp = MiceData(mice_dict, activity_volume, atlas_volume, voxel_volume, activity_injected)
+    temp.get_activity_organs()
+    mice_dict = temp.mice_dict
+    activity_all_organs = temp.activity_all_organs
+    volume_all_organs = temp.volume_all_organs
 
     # --- Ground Truth ---
     organs_of_interest = ["Hippocampus"]
-    temp = GroundTruth(activity_volume, atlas_volume, mice_dict, voxel_volume, activity_injected)
+    temp = GroundTruth(activity_volume, atlas_volume, mice_dict)
     temp.get_ground_truth(organs_of_interest)
 
     ground_truth = temp.act_data
     mask_ground_truth = temp.roi
-    mice_dict = temp.mice_dict
 
     # --- Segmentation ---
     temp = Segmentation(mice_dict, activity_volume)
@@ -77,12 +81,12 @@ if __name__ == "__main__":
     # print("NRMSE:", temp.NRMSE)
 
     # --- Visualization ---
-    # ax = 1
-    # plt.figure()
-    # plt.title("Ground Truth")
-    # visualizer = ImageVisualizer(ground_truth)
-    # # visualizer.sum_image(ax)
-    # visualizer.max_image(ax)
+    ax = 1
+    plt.figure()
+    plt.title("Ground Truth")
+    visualizer = ImageVisualizer(ground_truth)
+    # visualizer.sum_image(ax)
+    visualizer.max_image(ax)
     #
     # plt.figure()
     # plt.title("Activity Data")
@@ -100,7 +104,6 @@ if __name__ == "__main__":
     # visualizer.max_image(ax)
 
     # --- Write files to visualize in AMIDE ---
-    r = RawDataSetter(file_name=os.path.join(main_dir, "bin", "bayesian_16_full.dat"),
-                      volume=segmentation_volume)
-    r.write_files_simple_binary()
+    # r = RawDataSetter(file_name=os.path.join(main_dir, "bin", "bayesian_16_full.dat"), volume=segmentation_volume)
+    # r.write_files_simple_binary()
     plt.show()
