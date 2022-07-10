@@ -13,6 +13,7 @@ cv2.circle(mask, (206, 197), 74, 255, -1)
 cv2.circle(mask, (352, 206), 76, 255, -1)
 ground_truth = cv2.bitwise_and(fruit_RGB, fruit_RGB, mask=mask)
 
+
 plt.figure()
 plt.subplot(2, 1, 1)
 plt.imshow(fruit_RGB)
@@ -72,7 +73,7 @@ matriz_S = np.vstack([coluna_S] * iou_score_total.shape[0])
 matriz_S = matriz_S
 
 # for value in index:
-
+plt.show()
 
 
 # matriz_H = matriz_H[iou_score_total > 0.1 * iou_score_total.max()]
