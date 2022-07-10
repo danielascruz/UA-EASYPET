@@ -134,3 +134,4 @@ dmypy.json
 
 bin/
 image/
+results/

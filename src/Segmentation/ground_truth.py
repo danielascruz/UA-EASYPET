@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class GroundTruth:
@@ -12,9 +13,11 @@ class GroundTruth:
         volume = np.copy(self.atlas_data[:, :, :])
 
         self.roi = np.zeros((256, 256, 750))
-        for i in organs:
-            volume[volume != self.mice_dict[i]["id"]] = 0
+        for organ in organs:
+            volume[volume != self.mice_dict[organ]["id"]] = 0
             self.roi += volume
+            volume = np.copy(self.atlas_data[:, :, :])
 
         self.roi[self.roi != 0] = 1
-        self.act_data = self.roi * self.act_data
+        self.ground_truth = self.roi * self.act_data
+

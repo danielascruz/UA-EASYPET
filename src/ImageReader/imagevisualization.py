@@ -11,3 +11,4 @@ class ImageVisualizer:
 
     def max_image(self, ax=0):
         plt.imshow(np.max(self.data[:, :, :], axis=ax))
+        plt.axis("off")

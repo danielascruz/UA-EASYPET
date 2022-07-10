@@ -10,6 +10,7 @@ class MiceData:
         self.total_weight = self.calculate_mice_weight()
         self.total_activity = total_activity
         self.activity_all_organs = []
+        self.normalized_activity_all_organs = []
         self.volume_all_organs = []
 
     def calculate_mice_weight(self):
@@ -42,3 +43,8 @@ class MiceData:
         # Activity and volume of background
         self.activity_all_organs.append(0)
         self.volume_all_organs.append(0)
+
+        # Normalize activity
+        normalizer = sum(self.activity_all_organs)
+        for activity in self.activity_all_organs:
+            self.normalized_activity_all_organs.append(activity/normalizer)
