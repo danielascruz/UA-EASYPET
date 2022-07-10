@@ -50,7 +50,7 @@ class Segmentation:
     def k_means(self):
         matriz, weights = self.setup_kmeans_gaussian()
         kmeans = KMeans(n_clusters=14, init='k-means++', max_iter=500, n_init=10, random_state=0)
-        test = kmeans.fit_predict(matriz, weights)
+        test = kmeans.fit_predict(matriz, sample_weight=weights)
         matriz = matriz.astype(int)
         for element in range(len(test)):
             self.segmentation[matriz[element, 0], matriz[element, 1], matriz[element, 2]] = test[element]
@@ -59,7 +59,7 @@ class Segmentation:
 
     def gaussian(self):
         matriz, weights = self.setup_kmeans_gaussian()
-        gaussian = GaussianMixture(n_components=16, init_params='kmeans++', covariance_type="diag", weights_init=self.organs_activity)
+        gaussian = GaussianMixture(n_components=14, init_params='k-means++', weights_init=self.organs_activity)
         fit_test = gaussian.fit(matriz, weights)
         test = gaussian.predict(matriz)
         matriz = matriz.astype(int)
@@ -99,7 +99,7 @@ class Segmentation:
         matriz[:, 2] = im_index_z[layer != 0]
         matriz[:, 3] = weights
 
-        gaussian = BayesianGaussianMixture(n_components=16, random_state=0, n_init=10, max_iter=300, verbose=1)
+        gaussian = BayesianGaussianMixture(n_components=14, random_state=0, n_init=10, max_iter=300, verbose=1)
         fit_test = gaussian.fit(matriz)
         test = gaussian.predict(matriz)
         matriz = matriz.astype(int)
