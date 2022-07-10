@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture, BayesianGaussianMixture
@@ -11,6 +10,12 @@ class Segmentation:
         self.organs_activity = organs_activity
 
     def setup_kmeans_gaussian(self):
+        """
+        Create matrices and weights to be used in both the k-means
+        and gaussian mixture methods. Since the setup for bayesian
+        gaussian is slightly different, it could not be refactored
+        into this function.
+        """
         volume = np.copy(self.activity_volume[:, :, :])
         layer = volume[:, :, :]
         sum_all = np.sum(layer)
@@ -54,7 +59,7 @@ class Segmentation:
 
     def gaussian(self):
         matriz, weights = self.setup_kmeans_gaussian()
-        gaussian = GaussianMixture(n_components=16, covariance_type="diag", weights_init=self.organs_activity)
+        gaussian = GaussianMixture(n_components=16, init_params='kmeans++', covariance_type="diag", weights_init=self.organs_activity)
         fit_test = gaussian.fit(matriz, weights)
         test = gaussian.predict(matriz)
         matriz = matriz.astype(int)

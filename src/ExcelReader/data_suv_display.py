@@ -6,6 +6,7 @@ class SuvDisplayer:
         self.data = data
 
     def graphic_organ_mice(self):
+        """Used to compute the graphs for the report"""
         plt.figure()
         plt.ylabel("SUV values (g/mL)")
         plt.grid(linestyle='--', zorder=0)

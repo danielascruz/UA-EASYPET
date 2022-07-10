@@ -8,6 +8,10 @@ class Metrics:
         self.segmented_image = segmented_image
 
     def get_metrics(self):
+        """
+        Calculate some useful metrics to evaluate the segmented volumes.
+        """
+
         normalized_truth = self.ground_truth / (np.max(self.ground_truth[:, :, :]))
         normalized_image = self.segmented_image / (np.max(self.ground_truth[:, :, :]))
         number_voxels = len(self.segmented_image[self.segmented_image != 0])
@@ -20,6 +24,7 @@ class Metrics:
         return SNR, MSE, MAE, VOLUME
 
     def get_mae(self):
+        # Not found as a method in either sklearn or skimage, so I built my own.
         flat_ground_truth = np.asarray(flatten_matrix(self.ground_truth))
         flat_segmented = np.asarray(flatten_matrix(self.segmented_image))
         return np.mean(np.abs(flat_segmented - flat_ground_truth))

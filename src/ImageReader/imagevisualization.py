@@ -7,8 +7,10 @@ class ImageVisualizer:
         self.data = data
 
     def sum_image(self, ax=0):
+        plt.figure()
         plt.imshow(np.sum(self.data[:, :, :], axis=ax))
 
     def max_image(self, ax=0):
+        plt.figure()
         plt.imshow(np.max(self.data[:, :, :], axis=ax))
         plt.axis("off")

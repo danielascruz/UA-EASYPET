@@ -11,6 +11,14 @@ class RegionInterest:
         self.activity_all_organs = activity_all_organs
 
     def determine_best_fit(self):
+        """
+        Determines the cluster with highest probability to correspond to the structure.
+        It does this by isolating the target clusters with the ground truth mask, and
+        then it chooses the biggest cluster within this volume.
+
+        The biggest cluster (the best fit), is represented by its whole volume, not only
+        the volume inside the wanted region.
+        """
         result = self.ground_truth_mask * self.segmentation_data
         segmentation_volume = np.copy(self.segmentation_data[:, :, :])
         volume = np.copy(result[:, :, :])
