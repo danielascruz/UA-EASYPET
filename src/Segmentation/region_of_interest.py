@@ -23,7 +23,7 @@ class RegionInterest:
         segmentation_volume = np.copy(self.segmentation_data[:, :, :])
         volume = np.copy(result[:, :, :])
 
-        number_organs = 16
+        number_organs = 14
         biggest_cluster = 0
         number_voxels = 0
 

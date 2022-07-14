@@ -9,7 +9,8 @@ from src.Metrics import Metrics
 import numpy as np
 
 MAIN_DIR = os.path.dirname(os.path.abspath(__file__))
-    
+
+
 def retrieve_atlas_data():
     """Read data from the MOBY phantom"""
     atlas_image_file_name = "Moby_average_act_av.bin"
@@ -18,6 +19,7 @@ def retrieve_atlas_data():
     data_setter_atlas = RawDataSetter(file_name=os.path.join(atlas_image_file_path, atlas_image_file_name), size_file_m=[256, 256, 750], pixel_size=1, pixel_size_axial=1)
     data_setter_atlas.read_files()
     return data_setter_atlas.volume
+
 
 def retrieve_mice_data():
     """Read data from mice activity and parse it into dictionary"""
@@ -38,11 +40,13 @@ def retrieve_activity_data():
     data_setter_act.read_files()
     return data_setter_act.volume
 
+
 def fill_dict():
     """Inject volume and activity data from activity map into dictionary"""
     data = MiceData(retrieve_mice_data(), retrieve_activity_data(), retrieve_atlas_data())
     return data.get_activity_organs()
-    
+
+
 def main():
     root = tk.Tk()
     root.withdraw()
@@ -52,10 +56,11 @@ def main():
     activity_all_organs = [0.8600082524324324, 0.9218793497297296, 0.9218793497297296, 0.9528148983783784, 0.7857629356756756, 0.8538211427027027, 0.822885594054054, 0.7981371551351352, 0.9095051302702702, 0.7733887162162163, 0.8909438010810811, 0.9218793497297296, 0.8352598135135135, 0]
     volume_all_organs = [0.03329708224999999, 0.0029876524999999997, 0.00394492075, 0.015404702124999997, 0.06205476187499999, 0.013459679374999999, 0.010417151625, 0.007310602749999999, 0.004545499874999999, 0.016858896249999998, 0.036251199874999994, 0.0028199781249999994, 0.007145976999999999, 0]
     normalized_activity_all_organs = [0.07645764576457645, 0.08195819581958194, 0.08195819581958194, 0.08470847084708472, 0.06985698569856985, 0.07590759075907591, 0.07315731573157315, 0.07095709570957096, 0.08085808580858085, 0.06875687568756876, 0.07920792079207921, 0.08195819581958194, 0.07425742574257425, 0.0]
-    #activity_all_organs, volume_all_organs, normalized_activity_all_organs, mice_dict = fill_dict()
+    # activity_all_organs, volume_all_organs, normalized_activity_all_organs, mice_dict = fill_dict()
 
     # Select organs to get results. To check for all, uncomment the line below
-    organs_of_interest = [organ for organ in mice_dict.keys() if mice_dict[organ]["id"] != "None"]
+    organs_of_interest = ["Hippocampus"]
+    # organs_of_interest = [organ for organ in mice_dict.keys() if mice_dict[organ]["id"] != "None"]
 
     atlas_volume = retrieve_atlas_data()
     activity_volume = retrieve_activity_data()
@@ -82,7 +87,7 @@ def main():
         segmented_image = interest_region.determine_best_fit()
 
         temp = Metrics(ground_truth, segmented_image)
-        SNR, MSE, MAE, VOLUME =  temp.get_metrics()
+        SNR, MSE, MAE, VOLUME = temp.get_metrics()
 
         print("Organ:", organ)
         print("MAE:", MAE)
@@ -90,13 +95,10 @@ def main():
         print("SNR:", SNR)
         print("volume:", VOLUME)
 
-        visualizer = ImageVisualizer(ground_truth)
+        visualizer = ImageVisualizer(segmented_image)
         visualizer.max_image(ax=1)
         plt.title("Organ: " + organ)
     plt.show()
-
-
-
 
 
 if __name__ == "__main__":
