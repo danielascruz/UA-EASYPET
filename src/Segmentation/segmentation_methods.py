@@ -45,26 +45,30 @@ class Segmentation:
         matriz[:, 1] = im_index_y[layer != 0]
         matriz[:, 2] = im_index_z[layer != 0]
 
-        return matriz, weights
+        matriz_teste = np.zeros((len(layer[layer != 0]), 1))
+        matriz_teste[:, 0] = weights * 100000
+
+        return matriz, weights, matriz_teste
 
     def k_means(self):
-        matriz, weights = self.setup_kmeans_gaussian()
+        matriz_index, weights, matriz = self.setup_kmeans_gaussian()
         kmeans = KMeans(n_clusters=14, init='k-means++', max_iter=500, n_init=10, random_state=0)
         test = kmeans.fit_predict(matriz, sample_weight=weights)
-        matriz = matriz.astype(int)
+        matriz_index = matriz_index.astype(int)
         for element in range(len(test)):
-            self.segmentation[matriz[element, 0], matriz[element, 1], matriz[element, 2]] = test[element]
+            self.segmentation[matriz_index[element, 0], matriz_index[element, 1], matriz_index[element, 2]] = test[element]
 
         return self.segmentation
 
     def gaussian(self):
-        matriz, weights = self.setup_kmeans_gaussian()
+        matriz_index, weights, matriz = self.setup_kmeans_gaussian()
         gaussian = GaussianMixture(n_components=14, weights_init=self.organs_activity)
         test = gaussian.fit_predict(matriz, weights)
         # test = gaussian.predict(matriz)
-        matriz = matriz.astype(int)
+        matriz_index = matriz_index.astype(int)
         for element in range(len(test)):
-            self.segmentation[matriz[element, 0], matriz[element, 1], matriz[element, 2]] = test[element]
+            self.segmentation[matriz_index[element, 0], matriz_index[element, 1], matriz_index[element, 2]] = test[
+                element]
 
         return self.segmentation
 
@@ -99,17 +103,17 @@ class Segmentation:
         matriz[:, 1] = im_index_y[layer != 0]
         matriz[:, 2] = im_index_z[layer != 0]
         matriz[:, 3] = weights
-        matriz_teste = np.zeros((len(layer[layer != 0]), 4))
-        matriz_teste[:, 0] = weights*1000000
+        matriz_teste = np.zeros((len(layer[layer != 0]), 1))
+        matriz_teste[:, 0] = weights*100000
         # matriz_teste[:, 1] = im_index_z[layer != 0]
         # matriz_teste[:, 2] = im_index_y[layer != 0]
-        # matriz_teste[:, 2] = im_index_y[layer != 0]
+        # matriz_teste[:, 3] = im_index_x[layer != 0]
         # # matriz_teste[:, 3] = 1
-        v = np.unique(weights)
-        for i in v:
-            matriz_teste[weights == i, 1] = i
-            matriz_teste[weights == i, 2] = i
-            matriz_teste[weights == i, 3] = i
+        # v = np.unique(weights)
+        # for i in v:
+        #     matriz_teste[weights == i, 1] = i
+        #     matriz_teste[weights == i, 2] = i
+        #     matriz_teste[weights == i, 3] = i
         # matriz_tadd = matriz_teste
 
         # c = 1

@@ -69,9 +69,9 @@ def main():
     segmenter = Segmentation(mice_dict, activity_volume, normalized_activity_all_organs)
 
     # Segmentation methods. Uncomment the one to use
-    # segmented_volume = segmenter.k_means()
+    segmented_volume = segmenter.k_means()
     # segmented_volume = segmenter.gaussian()
-    segmented_volume = segmenter.bayesian_gaussian()
+    # segmented_volume = segmenter.bayesian_gaussian()
     
     # Uncomment if necessary
     # visualizer = ImageVisualizer(segmented_volume)
