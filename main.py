@@ -64,13 +64,14 @@ def main():
 
     atlas_volume = retrieve_atlas_data()
     activity_volume = retrieve_activity_data()
-
+    atlas_volume = atlas_volume[50:-50,50:-50,550:]
+    activity_volume = activity_volume[50:-50,50:-50,550:]
     segmenter = Segmentation(mice_dict, activity_volume, normalized_activity_all_organs)
 
     # Segmentation methods. Uncomment the one to use
-    segmented_volume = segmenter.k_means()
+    # segmented_volume = segmenter.k_means()
     # segmented_volume = segmenter.gaussian()
-    # segmented_volume = segmenter.bayesian_gaussian()
+    segmented_volume = segmenter.bayesian_gaussian()
     
     # Uncomment if necessary
     # visualizer = ImageVisualizer(segmented_volume)
@@ -85,7 +86,8 @@ def main():
 
         interest_region = RegionInterest(activity_volume, segmented_volume, ground_truth_mask, ground_truth)
         segmented_image = interest_region.determine_best_fit()
-
+        # segmented_image = segmented_volume
+        # segmented_image[segmented_image !=10] =0
         temp = Metrics(ground_truth, segmented_image)
         SNR, MSE, MAE, VOLUME = temp.get_metrics()
 
@@ -97,6 +99,9 @@ def main():
 
         visualizer = ImageVisualizer(segmented_image)
         visualizer.max_image(ax=1)
+
+        w = RawDataSetter(os.path.join(MAIN_DIR, "bin", "generated"), volume=activity_volume)
+        w.write_files_simple_binary()
         plt.title("Organ: " + organ)
     plt.show()
 

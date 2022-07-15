@@ -26,15 +26,24 @@ class RegionInterest:
         number_organs = 14
         biggest_cluster = 0
         number_voxels = 0
-
+        clusters_detected = list()
         for i in range(1, number_organs):
             voxels_cluster = len(volume[volume == i])
 
             if voxels_cluster > number_voxels:
                 biggest_cluster = i
+                clusters_detected.append(i)
                 number_voxels = voxels_cluster
 
-        segmentation_volume[segmentation_volume != biggest_cluster] = 0
+        #para juntar varios
+        for c in clusters_detected:
+            segmentation_volume[segmentation_volume == c] = number_organs+1
+        print(clusters_detected)
+        print(biggest_cluster)
+
+        segmentation_volume[segmentation_volume != number_organs+1] = 0
+        # segmentation_volume[segmentation_volume != biggest_cluster] = 0
         segmentation_volume[segmentation_volume != 0] = 1
 
-        return segmentation_volume * self.act_data
+        # return self.segmentation_data
+        return segmentation_volume

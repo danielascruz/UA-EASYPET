@@ -10,7 +10,8 @@ class GroundTruth:
 
     def get_ground_truth(self, organs):
         atlas_copy = np.copy(self.atlas_volume[:, :, :])
-        roi = np.zeros((256, 256, 750))
+        # roi = np.zeros((256, 256, 750))
+        roi = np.zeros(self.atlas_volume.shape)
 
         for organ in organs:
             atlas_copy[atlas_copy!= self.mice_dict[organ]["id"]] = 0
