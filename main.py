@@ -59,35 +59,35 @@ def main():
     # activity_all_organs, volume_all_organs, normalized_activity_all_organs, mice_dict = fill_dict()
 
     # Select organs to get results. To check for all, uncomment the line below
-    organs_of_interest = ["Hippocampus"]
-    # organs_of_interest = [organ for organ in mice_dict.keys() if mice_dict[organ]["id"] != "None"]
+    # organs_of_interest = ["Hippocampus"]
+    organs_of_interest = [organ for organ in mice_dict.keys() if mice_dict[organ]["id"] != "None"]
 
     atlas_volume = retrieve_atlas_data()
     activity_volume = retrieve_activity_data()
-    atlas_volume = atlas_volume[50:-50,50:-50,550:]
-    activity_volume = activity_volume[50:-50,50:-50,550:]
+    atlas_volume = atlas_volume[70:-70, 50:-50, 540:-50]
+    activity_volume = activity_volume[70:-70, 50:-50, 540:-50]
+
     segmenter = Segmentation(mice_dict, activity_volume, normalized_activity_all_organs)
 
     # Segmentation methods. Uncomment the one to use
-    segmented_volume = segmenter.k_means()
-    # segmented_volume = segmenter.gaussian()
+    # segmented_volume = segmenter.k_means()
+    segmented_volume = segmenter.gaussian()
     # segmented_volume = segmenter.bayesian_gaussian()
-    
+
     # Uncomment if necessary
     # visualizer = ImageVisualizer(segmented_volume)
     # visualizer.max_image(ax=1)
     # plt.show()
-    
+
     # Get metrics for all organs and the segmented image
     for organ in organs_of_interest:
-    
+
         truth = GroundTruth(activity_volume, atlas_volume, mice_dict)
         ground_truth_mask, ground_truth = truth.get_ground_truth([organ])
 
         interest_region = RegionInterest(activity_volume, segmented_volume, ground_truth_mask, ground_truth)
         segmented_image = interest_region.determine_best_fit()
-        # segmented_image = segmented_volume
-        # segmented_image[segmented_image !=10] =0
+
         temp = Metrics(ground_truth, segmented_image)
         SNR, MSE, MAE, VOLUME = temp.get_metrics()
 
@@ -97,13 +97,12 @@ def main():
         print("SNR:", SNR)
         print("volume:", VOLUME)
 
-        visualizer = ImageVisualizer(segmented_image)
-        visualizer.max_image(ax=1)
+        plt.imsave("teste_gaussian" + organ + ".png", np.max(segmented_image[:, :, :], axis=1), dpi=250)
 
-        w = RawDataSetter(os.path.join(MAIN_DIR, "bin", "generated"), volume=activity_volume)
-        w.write_files_simple_binary()
-        plt.title("Organ: " + organ)
-    plt.show()
+    # w = RawDataSetter(os.path.join(MAIN_DIR, "bin", "bayesian.dat"), volume=segmented_volume)
+    # w.write_files_simple_binary()
+
+
 
 
 if __name__ == "__main__":

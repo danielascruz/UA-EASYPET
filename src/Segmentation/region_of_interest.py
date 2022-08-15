@@ -45,5 +45,4 @@ class RegionInterest:
         # segmentation_volume[segmentation_volume != biggest_cluster] = 0
         segmentation_volume[segmentation_volume != 0] = 1
 
-        # return self.segmentation_data
-        return segmentation_volume
+        return segmentation_volume * self.act_data
